@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Big Red Button</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#111,#222,#000);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    overflow:hidden;
+}
+
+.container{
+    width:100%;
+    max-width:500px;
+    padding:20px;
+}
+
+#counter{
+    font-size:4rem;
+    font-weight:bold;
+    color:white;
+    text-shadow:0 0 20px cyan;
+    margin-bottom:40px;
+    transition:0.3s;
+}
+
+#message{
+    min-height:120px;
+    margin-bottom:20px;
+}
+
+.big-btn{
+    width:280px;
+    height:280px;
+    border-radius:50%;
+    border:none;
+    cursor:pointer;
+    background:radial-gradient(circle,#ff5555,#cc0000);
+    color:white;
+    font-size:2rem;
+    font-weight:bold;
+    box-shadow:
+        0 0 30px red,
+        inset 0 0 30px rgba(255,255,255,0.3);
+    transition:0.12s;
+}
+
+.big-btn:active{
+    transform:scale(0.9);
+}
+
+.pulse{
+    animation:pulse 0.3s;
+}
+
+@keyframes pulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.15);}
+    100%{transform:scale(1);}
+}
+
+.final-number{
+    font-size:8rem !important;
+    font-weight:900;
+    animation:bounce 0.7s infinite;
+}
+
+@keyframes bounce{
+    50%{
+        transform:scale(1.2);
+    }
+}
+
+.rainbow{
+    animation:rainbow 0.5s infinite;
+}
+
+@keyframes rainbow{
+    0%{color:red;}
+    20%{color:orange;}
+    40%{color:yellow;}
+    60%{color:lime;}
+    80%{color:cyan;}
+    100%{color:magenta;}
+}
+
+.surprise{
+    font-size:2rem;
+    color:gold;
+    font-weight:bold;
+    animation:spin 1s infinite alternate;
+}
+
+@keyframes spin{
+    from{transform:rotate(-3deg);}
+    to{transform:rotate(3deg);}
+}
+
+.confetti{
+    position:fixed;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    animation:fall 3s linear forwards;
+}
+
+@keyframes fall{
+    from{
+        transform:translateY(-50px);
+    }
+    to{
+        transform:translateY(110vh) rotate(720deg);
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div id="counter">100000</div>
+
+    <div id="message"></div>
+
+    <button class="big-btn" id="btn">
+        PRESS
+    </button>
+
+</div>
+
+<script>
+let count = 100000;
+
+const counter = document.getElementById("counter");
+const btn = document.getElementById("btn");
+const message = document.getElementById("message");
+
+btn.addEventListener("click", () => {
+
+    if(count <= 0) return;
+
+    count--;
+
+    counter.textContent = count;
+
+    counter.classList.remove("pulse");
+    void counter.offsetWidth;
+    counter.classList.add("pulse");
+
+    if(count <= 10 && count > 0){
+        counter.classList.add("final-number");
+        counter.classList.add("rainbow");
+    }
+
+    if(count === 0){
+
+        counter.textContent = "0";
+
+        btn.style.display = "none";
+
+        message.innerHTML = `
+        <div class="surprise">
+            🎉 SURPRISE! 🎉
+            <br><br>
+            You got absolutely NOTHING.
+            <br><br>
+            After pressing a button
+            100,000 times...
+            that's actually impressive. 😂
+        </div>
+        `;
+
+        createConfetti();
+    }
+});
+
+function createConfetti(){
+
+    const colors = [
+        "red","blue","green",
+        "yellow","cyan",
+        "magenta","orange"
+    ];
+
+    for(let i=0;i<250;i++){
+
+        const c = document.createElement("div");
+
+        c.className = "confetti";
+
+        c.style.left = Math.random()*100 + "vw";
+        c.style.background =
+            colors[Math.floor(Math.random()*colors.length)];
+
+        c.style.animationDelay =
+            Math.random()*2 + "s";
+
+        document.body.appendChild(c);
+    }
+}
+</script>
+
+</body>
+</html>
